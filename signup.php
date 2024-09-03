@@ -5,32 +5,57 @@ if (isset($_SESSION['username'])) {
 }
 include 'connection.php';
 
+$info = "";
+
 if (isset($_POST['submit'])) {
     $name = $_POST['name'];
     $email = $_POST['email'];
     $password = $_POST['password'];
     $cpassword = $_POST['cpassword'];
-    if ($name && $email && $password && $cpassword) {
-        if ($password === $cpassword) {
-            $hashPass = password_hash($password, PASSWORD_BCRYPT);
-            $hashCpass = password_hash($cpassword, PASSWORD_BCRYPT);
 
-            $query = "INSERT INTO users(name, email, password, cpassword) VALUES ('$name','$email','$hashPass','$hashCpass')";
-            $result = mysqli_query($con, $query);
-
-            if ($result) {
-                echo "data inserted successfully login and complete your profile";
-
-            } else {
-                echo "not inserted";
-            }
-
-
-        } else {
-            echo "passwords are not matching";
-        }
+    if (!preg_match('/[A-Za-z0-9\._%+\-]+@[A-Za-z0-9\.\-]+\.[A-Za-z]{2,}/', $email)) {
+        $info = "Enter an valid email";
     } else {
-        echo "enter all fields";
+
+
+
+        $query = "SELECT * from users where email='$email'";
+        $result = mysqli_query($con, $query);
+        $user = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        // echo "<pre>";
+        // print_r($user);
+        $user_count = count($user);
+        if ($user_count === 0) {
+            if ($name && $email && $password && $cpassword) {
+                if ($password === $cpassword) {
+                    $hashPass = password_hash($password, PASSWORD_BCRYPT);
+                    $hashCpass = password_hash($cpassword, PASSWORD_BCRYPT);
+
+                    $query = "INSERT INTO users(name, email, password, cpassword) VALUES ('$name','$email','$hashPass','$hashCpass')";
+                    $result = mysqli_query($con, $query);
+
+                    if ($result) {
+                        $info = "data inserted successfully login and complete your profile";
+                        // echo "data inserted successfully login and complete your profile";
+
+                    } else {
+                        // echo "not inserted";
+                        $info = "not inserted";
+                    }
+
+
+                } else {
+                    $info = "passwords are not matching";
+                    // echo "passwords are not matching";
+                }
+            } else {
+                // echo "enter all fields";
+                $info = "enter all fields";
+            }
+        } else {
+            $info = "user already exists please try with different email";
+            // echo "user already exists please try with different email";
+        }
     }
 
 
@@ -103,6 +128,9 @@ if (isset($_POST['submit'])) {
                             <div class="form-group">
                                 <input type="submit" name="submit" value="Sign up" class="btn btn-primary">
                             </div>
+                            <?php if ($info != "") {
+                                echo $info;
+                            } ?>
                         </div>
                     </div>
 

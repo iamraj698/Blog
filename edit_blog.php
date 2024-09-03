@@ -2,8 +2,8 @@
 include 'connection.php';
 $id = $_GET['id'];
 if (isset($_POST['submit'])) {
-    $title = $_POST['title'];
-    $description = $_POST['description'];
+    // $title = $_POST['title'];
+    $description = $_POST['editor'];
     // $id = $_SESSION['user_id'];
     $query = "UPDATE blogs set title='$title', description='$description' where id=$id";
     $result = mysqli_query($con, $query);
@@ -20,9 +20,10 @@ if (isset($_POST['submit'])) {
 $query = "SELECT * from blogs where id=$id";
 $result = mysqli_query($con, $query);
 $row = mysqli_fetch_array($result);
-
+// echo "<pre>";
+// print_r($row['description']);
 ?>
-
+<!-- 
 <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="parent bg-dark p-3 w-100 text-light">
         <h1 class="text-center">Add Post</h1>
@@ -56,7 +57,10 @@ $row = mysqli_fetch_array($result);
 
         </form>
     </div>
-</div>
-
+</div> -->
+<form method="POST">
+    <textarea class="editor" name="editor"><?php echo $row['description']; ?></textarea>
+    <input type="submit" name="submit" class="btn btn-primary">
+</form>
 
 <?php include 'footer.php'; ?>
