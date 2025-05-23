@@ -5,7 +5,7 @@ if (isset($_POST['submit'])) {
     // $title = $_POST['title'];
     $description = $_POST['editor'];
     // $id = $_SESSION['user_id'];
-    $query = "UPDATE blogs set title='$title', description='$description' where id=$id";
+    $query = "UPDATE blogs set description='$description' where id=$id";
     $result = mysqli_query($con, $query);
     if ($result) {
         echo "Blog Updated";

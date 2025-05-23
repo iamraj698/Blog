@@ -16,16 +16,16 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
 // print_r($rows);
 ?>
 <div class="container">
-    <h1>My Posts</h1>
+    <h1 class="text-center">My Posts</h1>
     <?php if ($rows) {
         foreach ($rows as $blog) {
             ?>
             <div class="parent_container">
-                <div class="title text-center">
+                <!-- <div class="title text-center">
 
                     <h2><?php echo $blog['title']; ?></h2>
-                </div>
-                <div class="description text-center">
+                </div> -->
+                <div class="description">
                     <p class="text-justify"><?php echo $blog['description']; ?></p>
                 </div>
                 <?php if ($_SESSION['user_id']) {
